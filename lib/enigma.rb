@@ -23,8 +23,25 @@ class Enigma
     }
   end
 
-  def decrypt(mod_text, key, date = today_date)
-    require 'pry'; binding.pry
+  def decrypt(code, key, date = today_date)
+    s            = shifts(key, date)
+    shift_values = [s[:a], s[:b], s[:c], s[:d]]
+
+    decrypted_text = code.downcase.chars.map.with_index do |char, index|
+      if CHARSET.include?(char)
+        shift     = shift_values[index % 4]
+        old_index = CHARSET.index(char)
+        new_index = (old_index - shift) % CHARSET.length
+        CHARSET[new_index]
+      else 
+        char
+      end
+    end.join
+    {
+      decryption: decrypted_text,
+      key: key,
+      date: date
+    }
   end
 
   private 

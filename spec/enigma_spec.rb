@@ -79,4 +79,13 @@ RSpec.describe 'Enigma' do
   it '#gen_key' do
     expect(@enigma.send(:gen_key)).to match(/^\d{5}$/)
   end
+
+  it '#crack decrypts without a key using known suffix' do
+    code   = "vjqtbeaweqihssi"
+    result = @enigma.crack(code, "291018")
+
+    expect(result[:decryption]).to eq("hello world end")
+    expect(result[:key]).to eq("08304")
+    expect(result[:date]).to eq("291018")
+  end
 end
